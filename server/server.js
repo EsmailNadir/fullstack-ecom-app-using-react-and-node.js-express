@@ -6,7 +6,7 @@ const productRoutes = require('./routes/productRoutes');
 const userRoutes = require('./routes/UserRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 
-dotenv.config();
+dotenv.config(); // Load environment variables from .env file
 
 const app = express();
 
@@ -35,8 +35,6 @@ app.use((err, req, res, next) => {
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
 })
 .then(() => console.log('Connected to MongoDB'))
 .catch((err) => console.error('Could not connect to MongoDB', err));

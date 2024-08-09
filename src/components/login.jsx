@@ -1,13 +1,19 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import {jwtDecode} from 'jwt-decode';
+
 
 function Login() {
+    
+    const navigate = useNavigate();
     const [loginEmail, setLoginEmail] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [loginError, setLoginError] = useState({
         loginEmail: '',
         loginPassword: '',
         general: ''
+        
     });
     const [loading, setLoading] = useState(false);
 
@@ -37,13 +43,21 @@ function Login() {
             const response = await axios.post('http://localhost:5001/api/users/login', { email: loginEmail, password: loginPassword });
             console.log('Login successful:', response.data);
 
-            if (response.data.token && response.data.userId) {
+            if (response.data.token) {
                 console.log('Token received:', response.data.token);
+               // console.log('UserId received:', response.data.userId);
                 localStorage.setItem("token", response.data.token);
-                localStorage.setItem("userId", response.data.userId); // Store the userId in localStorage
+                const decodedToken = jwtDecode(response.data.token);
+                //localStorage.setItem("userId", response.data.userId); // Store the userId in localStorage
                 console.log('Token stored in localStorage:', localStorage.getItem('token'));
-                console.log('UserId stored in localStorage:', localStorage.getItem('userId'));
-                window.location.href = '/';
+                //console.log('UserId stored in localStorage:', localStorage.getItem('userId'));
+                navigate('/')
+                if(response.data.userId){
+                    console.log('UserId received:', response.data.userId);
+                   const userId= localStorage.setItem("userId", decodedToken.userId);
+                    console.log('UserId stored in localStorage:', localStorage.getItem('userId'));
+                    navigate('/')
+                }
             } else {
                 setLoginError(prevErrors => ({ ...prevErrors, general: 'No token or userId received from server.' }));
             }

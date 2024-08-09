@@ -5,65 +5,57 @@ const auth = require('../middleware/auth');
 
 console.log('Cart routes loaded');
 
-// Get user's cart
-router.get('/:userId', auth, async (req, res) => {
-    console.log('GET /api/cart route executed');
+/// Get user's cart
+router.get('/', auth, async (req, res) => {
     try {
-        const cart = await Cart.findOne({ userId: req.params.userId }).populate('items.productId');
-        if (!cart) {
-            return res.status(404).json({ message: 'Cart not found' });
-        }
-        res.json(cart); // send cart data back to client
+      const cart = await Cart.findOne({ userId: req.user.userId }).populate('items.productId');
+      if (!cart) {
+        return res.status(404).json({ message: 'Cart not found' });
+      }
+      res.status(200).json(cart);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: err.message });
+      console.error(err);
+      res.status(500).json({ message: err.message });
     }
-});
-
-
-// Add item to cart
-router.post('/api/cart/add', auth, async (req, res) => {
-    console.log('POST /api/cart/add');
+  });
+  
+  // Add item to cart
+  router.post('/api/cart/add', auth, async (req, res) => {
     const { productId, quantity } = req.body;
-
-    try {
-        let cart = await Cart.findOne({ userId: req.user.userId });
-        if (!cart) {
-            cart = new Cart({ userId: req.user.userId, items: [] });
-        }
-
-        const itemIndex = cart.items.findIndex(item => item.productId == productId);
-        if (itemIndex > -1) {
-            cart.items[itemIndex].quantity += quantity;
-        } else {
-            cart.items.push({ productId, quantity });
-        }
-
-        await cart.save();
-        res.status(201).json(cart);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: err.message });
+  
+    // Input validation
+    if (!productId || !quantity) {
+      return res.status(400).json({ message: 'Product ID and quantity are required' });
     }
-});
-
-// Remove item from cart
-router.delete('/api/cart/remove/:productId', auth, async (req, res) => {
-    console.log('DELETE /api/cart/remove/:productId');
+  
+    try {
+      const cart = await Cart.findOneAndUpdate(
+        { userId: req.user.userId },
+        { $addToSet: { items: { productId, quantity } } },
+        { upsert: true, new: true }
+      );
+      res.status(201).json(cart);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: err.message });
+    }
+  });
+  
+  // Remove item from cart
+  router.delete('/api/cart/remove/:productId', auth, async (req, res) => {
     const { productId } = req.params;
-
+  
     try {
-        let cart = await Cart.findOne({ userId: req.user.userId });
-        if (!cart) return res.status(404).json({ message: 'Cart not found' });
-
-        cart.items = cart.items.filter(item => item.productId != productId);
-        await cart.save();
-        res.json(cart);
+      const cart = await Cart.findOneAndUpdate(
+        { userId: req.user.userId },
+        { $pull: { items: { productId } } }
+      );
+      if (!cart) return res.status(404).json({ message: 'Cart not found' });
+      res.status(204).json({ message: 'Item removed from cart' });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: err.message });
+      console.error(err);
+      res.status(500).json({ message: err.message });
     }
-});
-
+  });
 
 module.exports = router;
