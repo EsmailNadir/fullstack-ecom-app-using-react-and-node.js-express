@@ -1,10 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const productRoutes = require('./routes/productRoutes');
-const userRoutes = require('./routes/UserRoutes');
-const cartRoutes = require('./routes/cartRoutes');
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const productRoutes = require("./routes/productRoutes");
+const userRoutes = require("./routes/UserRoutes");
+const cartRoutes = require("./routes/cartRoutes");
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -15,31 +15,32 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 5001;
-consolelog('server is running',PORT);
+console.log("server is running", PORT);
 
-app.get('/', (_req, res) => {
-    res.send('Hello, welcome to the e-commerce backend!');
+app.get("/", (_req, res) => {
+  res.send("Hello, welcome to the e-commerce backend!");
 });
 
 // Use the routes
-app.use('/api/products', productRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/cart', cartRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/cart", cartRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
 });
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch((err) => console.error('Could not connect to MongoDB', err));
+  })
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("Could not connect to MongoDB", err));
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
