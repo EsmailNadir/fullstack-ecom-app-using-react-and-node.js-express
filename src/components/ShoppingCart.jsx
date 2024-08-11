@@ -22,7 +22,7 @@ function ShoppingCart() {
                     return;
                 }
                 const config = { headers: { 'Authorization': `Bearer ${token}` } };
-                const response = await axios.get(`http://localhost:5173/cart/${userId}`, config);
+                const response = await axios.get(`http://localhost:5001/cart/${userId}`, config);
                 if (response.data.items) {
                     setCart(response.data.items);
                 } else {
@@ -50,10 +50,10 @@ function ShoppingCart() {
                 return;
             }
             const config = { headers: { 'Authorization': `Bearer ${token}` } };
-            await axios.post('http://localhost:5173/cart/add', { productId, quantity, userId }, config);
+            await axios.post('http://localhost:5001/cart/add', { productId, quantity, userId }, config);
 
             // Refresh cart after adding an item
-            const response = await axios.get(`http://localhost:5173/cart/${userId}`, config);
+            const response = await axios.get(`http://localhost:5001/cart/${userId}`, config);
             setCart(response.data.items);
             setError(''); // Clear any previous errors on successful operation
         } catch (error) {
@@ -75,10 +75,10 @@ function ShoppingCart() {
                 return;
             }
             const config = { headers: { 'Authorization': `Bearer ${token}` } };
-            await axios.delete(`http://localhost:5173/cart/remove/${productId}`, config);
+            await axios.delete(`http://localhost:5001/cart/remove/${productId}`, config);
 
             // Refresh cart after removing an item
-            const response = await axios.get(`http://localhost:5173/cart/${userId}`, config);
+            const response = await axios.get(`http://localhost:5001/cart/${userId}`, config);
             setCart(response.data.items);
             setError(''); // Clear any previous errors on successful operation
         } catch (error) {

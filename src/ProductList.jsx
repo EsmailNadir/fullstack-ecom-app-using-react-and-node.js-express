@@ -22,7 +22,7 @@ function ProductList() {
     }, []);
     
     const handleAddToCart = async (productId, quantity = 1)  =>{
-       const response = await axios.post('http://localhost:5173/cart', {productId, quantity});
+       const response = await axios.post('http://localhost:5001/cart', {productId, quantity});
     }
 
 

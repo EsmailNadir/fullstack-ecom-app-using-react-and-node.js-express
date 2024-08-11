@@ -37,7 +37,6 @@ function Login() {
             }));
             return;
         }
-
         setLoading(true);
         try {
             const response = await axios.post('http://localhost:5001/api/users/login', { email: loginEmail, password: loginPassword });

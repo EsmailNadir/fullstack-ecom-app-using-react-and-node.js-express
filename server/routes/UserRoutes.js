@@ -15,6 +15,7 @@ router.post('/login', async (req, res) => {
         if (!user) {
             console.log('Invalid email');  // Debugging statement
             return res.status(400).json({ message: 'Invalid credentials' });
+            console.log(req.body);
         }
 
         // Compare the provided password with the stored hashed password
