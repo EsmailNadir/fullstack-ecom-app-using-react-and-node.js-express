@@ -7,7 +7,7 @@ function ProductList() {
     useEffect(() => {
         axios({
             method:'get',
-            baseURL:'http://localhost:5001/api/products',
+            baseURL:'http://localhost:5001/products',
             url:'products'
             
         })
@@ -20,9 +20,16 @@ function ProductList() {
                 console.error('Error fetching products:', error);
             });
     }, []);
+    
+    const handleAddToCart = async (productId, quantity = 1)  =>{
+       const response = await axios.post('http://localhost:5173/cart', {productId, quantity});
+    }
+
+
 
     return (
-        <div>
+        
+             <div>
             {products.map(product => (
                 <div key={product._id}>
                     <h2>{product.name}</h2>
@@ -30,8 +37,12 @@ function ProductList() {
                     <p>{product.price}</p>
                     <img src={product.imageUrl} alt={product.name} />
                 </div>
+                
             ))}
-        </div>
+            
+                <button type='submit' onClick={() => handleAddToCart(products._id)}>add to Cart</button>
+            </div>
+        
     );
 }
 

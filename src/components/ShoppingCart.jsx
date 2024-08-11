@@ -14,13 +14,15 @@ function ShoppingCart() {
             console.log('Fetching cart...');
             setLoading(true); // Set loading to true at the start of the fetch
             try {
+                const userId = localStorage.getItem("userId");
+                console.log('userId stored in localstorage:',localStorage.getItem('userId'));
                 const token = localStorage.getItem("token");
                 if (!userId || !token) {
                     console.error('User ID or token not found in local storage');
                     return;
                 }
                 const config = { headers: { 'Authorization': `Bearer ${token}` } };
-                const response = await axios.get(`http://localhost:5001/api/cart/${userId}`, config);
+                const response = await axios.get(`http://localhost:5173/cart/${userId}`, config);
                 if (response.data.items) {
                     setCart(response.data.items);
                 } else {
@@ -35,7 +37,7 @@ function ShoppingCart() {
             }
         };
         fetchCart();
-    }, [userId]);
+    }, []);
 
     // Add item to cart
     const handleAddItem = async (productId, quantity = 1) => {
@@ -48,10 +50,10 @@ function ShoppingCart() {
                 return;
             }
             const config = { headers: { 'Authorization': `Bearer ${token}` } };
-            await axios.post('http://localhost:5001/api/cart/add', { productId, quantity, userId }, config);
+            await axios.post('http://localhost:5173/cart/add', { productId, quantity, userId }, config);
 
             // Refresh cart after adding an item
-            const response = await axios.get(`http://localhost:5001/api/cart/${userId}`, config);
+            const response = await axios.get(`http://localhost:5173/cart/${userId}`, config);
             setCart(response.data.items);
             setError(''); // Clear any previous errors on successful operation
         } catch (error) {
@@ -73,10 +75,10 @@ function ShoppingCart() {
                 return;
             }
             const config = { headers: { 'Authorization': `Bearer ${token}` } };
-            await axios.delete(`http://localhost:5001/api/cart/remove/${productId}`, config);
+            await axios.delete(`http://localhost:5173/cart/remove/${productId}`, config);
 
             // Refresh cart after removing an item
-            const response = await axios.get(`http://localhost:5001/api/cart/${userId}`, config);
+            const response = await axios.get(`http://localhost:5173/cart/${userId}`, config);
             setCart(response.data.items);
             setError(''); // Clear any previous errors on successful operation
         } catch (error) {

@@ -64,7 +64,7 @@ function AdminProductManagement() {
         };
 
         try {
-            await axios.delete(`http://localhost:5001/api/product/${productId}`, config);
+            await axios.delete(`http://localhost:5001/api/products/${productId}`, config);
             setSuccess("Product deleted successfully");
             setProducts(products.filter(product => product._id !== productId));
         } catch (error) {
@@ -105,13 +105,13 @@ function AdminProductManagement() {
 
         try {
             if (editMode) {
-                await axios.put(`http://localhost:5001/api/product/${currentProductId}`, form, config);
+                await axios.put(`http://localhost:5001/api/products/${currentProductId}`, form, config);
                 setSuccess('Product updated successfully');
             } else {
-                await axios.post('http://localhost:5001/api/product', form, config);
+                await axios.post('http://localhost:5001/api/products', form, config);
                 setSuccess('Product added successfully');
             }
-            const response = await axios.get('http://localhost:5001/api/product');
+            const response = await axios.get('http://localhost:5001/api/products');
             setProducts(response.data);
             setForm({
                 name: '',

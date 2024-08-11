@@ -43,23 +43,29 @@ function Login() {
             const response = await axios.post('http://localhost:5001/api/users/login', { email: loginEmail, password: loginPassword });
             console.log('Login successful:', response.data);
 
-            if (response.data.token) {
+            if (response.data.token ) {
                 console.log('Token received:', response.data.token);
                // console.log('UserId received:', response.data.userId);
                 localStorage.setItem("token", response.data.token);
                 const decodedToken = jwtDecode(response.data.token);
+                console.log('Decoded Token:', decodedToken);
+                console.log(decodedToken.userId);
                 //localStorage.setItem("userId", response.data.userId); // Store the userId in localStorage
                 console.log('Token stored in localStorage:', localStorage.getItem('token'));
                 //console.log('UserId stored in localStorage:', localStorage.getItem('userId'));
                 navigate('/')
-                if(response.data.userId){
-                    console.log('UserId received:', response.data.userId);
-                   const userId= localStorage.setItem("userId", decodedToken.userId);
-                    console.log('UserId stored in localStorage:', localStorage.getItem('userId'));
-                    navigate('/')
-                }
-            } else {
-                setLoginError(prevErrors => ({ ...prevErrors, general: 'No token or userId received from server.' }));
+                if(decodedToken && decodedToken.userId){
+                    try {
+                        localStorage.setItem('userId', decodedToken.userId);
+                        console.log('UserId stored in localStorage:', localStorage.getItem('userId'));
+                        navigate('/');
+                    } catch (error) {
+                        console.error('Error storing userId in localStorage:', error);
+                    }
+                } else {
+                    console.error('UserId not received or decoded:', response.data.userId, decodedToken.userId);
+                };
+
             }
         } catch (error) {
             console.log('Error during login:', error);

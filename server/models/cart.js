@@ -1,6 +1,3 @@
-
-
-// cart.js (or your Mongoose model file)
 const mongoose = require('mongoose');
 
 const cartSchema = new mongoose.Schema({
@@ -16,7 +13,5 @@ const cartSchema = new mongoose.Schema({
     ]
     
 });
-cartSchema.index({ user_id: 1 });
-cartSchema.index({ product_id: 1 });
 
 module.exports = mongoose.model('Cart', cartSchema);

@@ -24,7 +24,7 @@ function App() {
           <Route path="/logout" element={<Logout />} />
           <Route path="/" element={<Home />} />
           <Route path="/AdminProductManagement" element={<AdminProductManagement />} />
-          <Route path="/cart" element={<Cart/>}/>
+          <Route path="/cart" element={<Cart key="cart"/>}/>
 
           {/* Private Routes */}
           <Route element={<PrivateRoute />}>
