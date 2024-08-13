@@ -1,7 +1,7 @@
-import express from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import User from '../models/User';  // Ensure this is the correct import
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.post('/login', async (req, res) => {
         if (!user) {
             console.log('Invalid email');  // Debugging statement
             return res.status(400).json({ message: 'Invalid credentials' });
-            console.log(req.body);
+            
         }
 
         // Compare the provided password with the stored hashed password
@@ -38,4 +38,4 @@ router.post('/login', async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;

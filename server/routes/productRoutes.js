@@ -6,7 +6,7 @@ const admin = require('../middleware/admin');
 const router = express.Router();
 
 // Get all products (public route)
-router.get('/products', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const Products = await Product.find();
         res.json(Products);
@@ -16,7 +16,7 @@ router.get('/products', async (req, res) => {
 });
 
 // Create a new product (protected route)
-router.post('/products', [auth, admin], async (req, res) => {
+router.post('/', [auth, admin], async (req, res) => {
     const product = new Product({
         name: req.body.name,
         description: req.body.description,

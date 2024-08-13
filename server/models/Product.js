@@ -8,6 +8,6 @@ const productsSchema = new mongoose.Schema({
     rating: {type:Number, default:0},
 });
 
-const Products = mongoose.model('Products', productsSchema);
+const products = mongoose.model('products', productsSchema);
 
-module.exports = Products;
+module.exports = products;

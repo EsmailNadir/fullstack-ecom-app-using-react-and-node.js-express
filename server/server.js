@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 5001;
-consolelog('server is running',PORT);
+console.log('server is running',PORT);
 
 app.get('/', (_req, res) => {
     res.send('Hello, welcome to the e-commerce backend!');
@@ -33,7 +33,7 @@ app.use((err, req, res, next) => {
 });
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
