@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
         console.log('Fetched user:', user);  // Debugging statement
         console.log('User ID:', user._id);  // Debugging statement
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: 'Infinity' });
         
         console.log('Token:', token);  // Debugging statement
         console.log('Response:', { token, userId: user._id });  
