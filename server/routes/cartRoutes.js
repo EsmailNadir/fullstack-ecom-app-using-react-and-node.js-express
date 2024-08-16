@@ -1,5 +1,7 @@
 const express = require("express");
-const mongoose = require("mongoose");  // Make sure mongoose is required
+// import mongoose from 'mongoose';
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose;
 const router = express.Router();
 const Cart = require("../models/cart");
 const auth = require("../middleware/auth");
@@ -47,17 +49,21 @@ router.post("/add", auth, async (req, res) => {
     }
 });
 // Remove item from cart
-router.delete("/api/cart/remove/:productId", auth, async (req, res) => {
+router.delete("/remove/:productId", auth, async (req, res)=> {
+    console.log("Removing item with productId:", req.params.productId);
     const { productId } = req.params;
-
+    const quantity = req.body.quantity;
+     
+   
     try {
         // Convert productId to ObjectId if necessary
-        const productObjectId = mongoose.Types.ObjectId(productId);
+        const productObjectId = new ObjectId(productId);
+        console.log("productObjectId:", productObjectId);
 
         // Find the cart and remove the item with the specified productId
-        const cart = await Cart.findOneAndUpdate(
+        const cart = await  Cart.findOneAndUpdate(
             { userId: req.user.userId },
-            { $pull: { items: { productId: productObjectId } } },
+            { $pull: { items: {_id: new ObjectId(req.params.productId) } } },
             { new: true } // Return the updated cart
         );
 

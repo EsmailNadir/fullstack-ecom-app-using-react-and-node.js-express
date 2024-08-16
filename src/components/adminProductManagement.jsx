@@ -105,7 +105,7 @@ function AdminProductManagement() {
 
         try {
             if (editMode) {
-                await axios.put(`http://localhost:5001/api/products/${currentProductId}`, form, config);
+                await axios.put(`http://localhost:5001/api/products/update/${currentProductId}`, form, config);
                 setSuccess('Product updated successfully');
             } else {
                 await axios.post('http://localhost:5001/api/products', form, config);
