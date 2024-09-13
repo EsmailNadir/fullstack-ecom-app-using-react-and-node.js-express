@@ -1,10 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 function Login() {
-    
     const navigate = useNavigate();
     const [loginEmail, setLoginEmail] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
@@ -12,7 +11,6 @@ function Login() {
         loginEmail: '',
         loginPassword: '',
         general: ''
-        
     });
     const [loading, setLoading] = useState(false);
 
@@ -41,29 +39,24 @@ function Login() {
             const response = await axios.post('http://localhost:5001/api/users/login', { email: loginEmail, password: loginPassword });
             console.log('Login successful:', response.data);
 
-            if (response.data.token ) {
+            if (response.data.token) {
                 console.log('Token received:', response.data.token);
-               // console.log('UserId received:', response.data.userId);
                 localStorage.setItem("token", response.data.token);
                 const decodedToken = jwtDecode(response.data.token);
                 console.log('Decoded Token:', decodedToken);
                 console.log(decodedToken.userId);
-                //localStorage.setItem("userId", response.data.userId); // Store the userId in localStorage
-                console.log('Token stored in localStorage:', localStorage.getItem('token'));
-                //console.log('UserId stored in localStorage:', localStorage.getItem('userId'));
-                navigate('/')
+                navigate('/products')
                 if(decodedToken && decodedToken.userId){
                     try {
                         localStorage.setItem('userId', decodedToken.userId);
                         console.log('UserId stored in localStorage:', localStorage.getItem('userId'));
-                        navigate('/');
+                        navigate('/products');
                     } catch (error) {
                         console.error('Error storing userId in localStorage:', error);
                     }
                 } else {
                     console.error('UserId not received or decoded:', response.data.userId, decodedToken.userId);
                 };
-
             }
         } catch (error) {
             console.log('Error during login:', error);
@@ -74,21 +67,54 @@ function Login() {
     };
 
     return (
-        <div>
-            <form className="login-sheet" onSubmit={handleLoginSubmit}>
-                <label>
-                    Email:
-                    <input type="text" value={loginEmail} onChange={handleLoginEmailChange} aria-invalid={loginError.loginEmail ? "true" : "false"} aria-describedby="loginEmailError" />
-                    {loginError.loginEmail && <p id="loginEmailError" className="error">{loginError.loginEmail}</p>}
-                </label>
-                <label>
-                    Password:
-                    <input type="password" value={loginPassword} onChange={handleLoginPasswordChange} aria-invalid={loginError.loginPassword ? "true" : "false"} aria-describedby="loginPasswordError" />
-                    {loginError.loginPassword && <p id="loginPasswordError" className="error">{loginError.loginPassword}</p>}
-                </label>
-                <button type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</button>
-                {loginError.general && <p className="error">{loginError.general}</p>}
-            </form>
+        <div className="flex justify-center items-center min-h-screen">
+            <div className="w-full max-w-sm">
+                
+                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleLoginSubmit}>
+                <h1 className="text-xl text-center mb-6">Login</h1>
+                    <div className="mb-4">
+                        <input 
+                            placeholder="Email" 
+                            className="w-full px-3 py-2 text-gray-700 border rounded focus:outline-none"
+                            type="email" 
+                            value={loginEmail} 
+                            onChange={handleLoginEmailChange} 
+                            aria-invalid={loginError.loginEmail ? "true" : "false"} 
+                            aria-describedby="loginEmailError" 
+                        />
+                        {loginError.loginEmail && <p id="loginEmailError" className="text-red-500 text-xs mt-1">{loginError.loginEmail}</p>}
+                    </div>
+                    
+                    <div className="mb-6">
+                        <input 
+                            placeholder="Password" 
+                            className="mb-4 w-full px-3 py-2 text-gray-700 border rounded focus:outline-none"
+                            type="password" 
+                            value={loginPassword} 
+                            onChange={handleLoginPasswordChange} 
+                            aria-invalid={loginError.loginPassword ? "true" : "false"} 
+                            aria-describedby="loginPasswordError" 
+                        />
+                        {loginError.loginPassword && <p id="loginPasswordError" className="text-red-500 text-xs mt-1">{loginError.loginPassword}</p>}
+                    </div>
+                    
+                    <div>
+                        <button
+                            className="w-full bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            type="submit" 
+                            disabled={loading}
+                        >
+
+                            {loading ? 'Logging in...' : 'Log In'}
+                        </button>
+                    </div>
+                    
+                    {loginError.general && <p className="text-red-500 text-xs text-center mt-4">{loginError.general}</p>}
+                    <div className="mt-5">
+                        <Link className="text-black text-xl" to="/signup">Or Sign Up</Link>                   
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

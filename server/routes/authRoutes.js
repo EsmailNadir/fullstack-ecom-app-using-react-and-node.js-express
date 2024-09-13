@@ -1,8 +1,9 @@
 import express from 'express';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { findOne } from '../models/User';
 import { useRoutes } from 'react-router-dom';
+import auth from '../middleware/auth';
 const router = express.Router();
 
 // User login

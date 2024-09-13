@@ -1,16 +1,10 @@
-const express = require('express');
-const Product = require('../models/Product');
-const auth = require('../middleware/auth');
+import express from 'express'
+import Product from '../models/Product.js';
+import auth from '../middleware/auth.js';
+import admin from '../middleware/admin.js';
 
 const router = express.Router();
 
-const admin = async (req, res, next) => {
-    if (req.user.role === 'admin') {
-      next(); // Allow admin access
-    } else {
-      return res.status(403).json({ message: 'Access denied' });
-    }
-  };
 
 // Get all products (public route)
 router.get("/", async (req, res) => {
@@ -29,8 +23,9 @@ router.get("/", async (req, res) => {
     }
   });
 
+
 // Create a new product (protected route)
-router.post('/create', [auth, admin], async (req, res) => {
+router.post('/', auth, async (req, res) => {
     console.log('Create product route reached!');
     console.log(req.body);
     const product = new Product({
@@ -49,7 +44,18 @@ router.post('/create', [auth, admin], async (req, res) => {
     }
    
 });
-router.delete('/delete/:id', [auth, admin], async (req, res) => {
+// update new product
+router.put('/update/:id', auth, async (req, res) => {
+    try {
+      const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      if (!product) return res.status(404).json({ message: 'Product not found' });
+      res.json(product);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  });
+
+router.delete('/delete/:id',auth, async (req, res) => {
     try {
         const productId = req.params.id;
         const product = await Product.findByIdAndDelete(productId);
@@ -62,5 +68,18 @@ router.delete('/delete/:id', [auth, admin], async (req, res) => {
         res.status(500).json({ message: 'Failed to delete product' });
     }
 });
+// Get a single product by ID
+router.get("/:id", async (req, res) => {
+    console.log("Received request for product ID:", req.params.id);
+    try {
+      const product = await Product.findById(req.params.id);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json(product);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
 
-module.exports =  router ;
+export default router;

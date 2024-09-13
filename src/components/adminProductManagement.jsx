@@ -1,5 +1,6 @@
+import React, { useState } from 'react';
 import axios from "axios";
-import { useState, useEffect } from "react";
+import {  useEffect } from "react";
 
 function AdminProductManagement() {
     const [products, setProducts] = useState([]);
@@ -50,7 +51,6 @@ function AdminProductManagement() {
         setLoading(true);
 
         const token = localStorage.getItem('token');
-        console.log("Token for DELETE:", token); // Log the token for debugging
         if (!token) {
             setError('No token found, authorization denied.');
             setLoading(false);
@@ -60,11 +60,11 @@ function AdminProductManagement() {
         const config = {
             headers: {
                 'Authorization': `Bearer ${token}`
-            }
+            } 
         };
 
         try {
-            await axios.delete(`http://localhost:5001/api/products/${productId}`, config);
+            await axios.delete(`http://localhost:5001/api/products/delete/${productId}`, config);
             setSuccess("Product deleted successfully");
             setProducts(products.filter(product => product._id !== productId));
         } catch (error) {
@@ -90,7 +90,6 @@ function AdminProductManagement() {
         setSuccess('');
 
         const token = localStorage.getItem('token');
-        console.log("Token for SUBMIT:", token); // Log the token for debugging
         if (!token) {
             setError('No token found, authorization denied.');
             setLoading(false);
@@ -131,17 +130,18 @@ function AdminProductManagement() {
     };
 
     return (
-        <div>
-            <h1>Admin Product Management</h1>
+        <div className="text-center">
+            <h1 className="text-2xl font-bold mb-6">Admin Product Management</h1>
             {loading && <p>Loading...</p>}
-            {error && <p className="error">{error}</p>}
-            {success && <p className="success">{success}</p>}
+            {error && <p className="text-red-500">{error}</p>}
+            {success && <p className="text-green-500">{success}</p>}
 
             <div className="ProductManagement">
-                <form onSubmit={handleFormSubmit}>
+                <form onSubmit={handleFormSubmit} className="space-y-4">
                     <label>
-                        Name:
                         <input
+                            className="w-full px-3 py-2 text-gray-700 border rounded focus:outline-none"
+                            placeholder="Name"
                             name="name"
                             type="text"
                             value={form.name}
@@ -149,8 +149,9 @@ function AdminProductManagement() {
                         />
                     </label>
                     <label>
-                        Description:
                         <input
+                            className="w-full px-3 py-2 text-gray-700 border rounded focus:outline-none"
+                            placeholder="Description"
                             name="description"
                             type="text"
                             value={form.description}
@@ -158,8 +159,9 @@ function AdminProductManagement() {
                         />
                     </label>
                     <label>
-                        Price:
                         <input
+                            className="w-full px-3 py-2 text-gray-700 border rounded focus:outline-none"
+                            placeholder="Price"
                             name="price"
                             type="number"
                             value={form.price}
@@ -167,8 +169,9 @@ function AdminProductManagement() {
                         />
                     </label>
                     <label>
-                        Ratings:
                         <input
+                            className="w-full px-3 py-2 text-gray-700 border rounded focus:outline-none"
+                            placeholder="Rating"
                             name="ratings"
                             type="number"
                             value={form.ratings}
@@ -176,29 +179,57 @@ function AdminProductManagement() {
                         />
                     </label>
                     <label>
-                        Image URL:
                         <input
+                            className="w-full px-3 py-2 text-gray-700 border rounded focus:outline-none"
+                            placeholder="Image URL"
                             name="imageUrl"
                             type="text"
                             value={form.imageUrl}
                             onChange={handleInputChange}
                         />
                     </label>
-                    <button type="submit" disabled={loading}>
+                    <button 
+                        className="w-20 p-2 bg-blue-500 text-white rounded cursor-pointer transition duration-200 hover:bg-blue-700"
+                        type="submit"
+                        disabled={loading}
+                    >
                         {loading ? 'Submitting...' : 'Submit'}
                     </button>
                 </form>
 
-                <h2>Product List</h2>
-                <ul>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
                     {products.map(product => (
-                        <li key={product._id}>
-                            <h3>{product.name}</h3>
-                            <p>{product.description}</p>
-                            <p>{product.price}</p>
-                            <p>{product.ratings}</p>
-                            <button onClick={() => handleEditProduct(product)}>Edit</button>
-                            <button onClick={() => handleDeleteProduct(product._id)}>Delete</button>
+                        <li key={product._id} className="bg-white p-4 rounded shadow-md">
+                            <div className="flex justify-center mb-4">
+                                <img
+                                    src={product.imageUrl}
+                                    alt={product.name}
+                                    className="w-full h-48 object-contain"
+                                />
+                            </div>
+                            <h3 className="text-lg font-semibold text-center mb-2">{product.name}</h3>
+                            <p className="text-sm text-gray-600 text-center mb-4">
+                              {product.description.length > 100 ? 
+                                  product.description.substring(0, 100) + '...' : 
+                                  product.description}
+                            </p>
+                            <p className="text-lg font-bold text-center">${product.price}</p>
+                            <p className="text-sm text-yellow-500 text-center">Rating: {product.ratings}</p>
+
+                            <div className="flex justify-between mt-4">
+                                <button
+                                    className=" bg-green-500 text-white p-2 rounded hover:bg-green-700 transition duration-200"
+                                    onClick={() => handleEditProduct(product)}
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    className=" bg-red-500 text-white p-2 rounded hover:bg-red-700 transition duration-200"
+                                    onClick={() => handleDeleteProduct(product._id)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </li>
                     ))}
                 </ul>

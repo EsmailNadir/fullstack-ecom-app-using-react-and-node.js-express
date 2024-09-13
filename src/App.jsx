@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ProductList from "./ProductList";
+import ProductList from "./components/ProductList";
 import Signup from "./components/signup";
 import Login from "./components/login";
 import Navbar from "./components/navbar";
@@ -9,8 +9,9 @@ import Home from "./components/home";
 import Logout from "./components/logout";
 import UserProfile from "./components/userProfile";
 import AdminProductManagement from "./components/adminProductManagement";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import './input.css';
 import Cart from "./components/ShoppingCart";
+import ProductAbout from "./components/productAbout";
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/AdminProductManagement" element={<AdminProductManagement />} />
           <Route path="/cart" element={<Cart key="cart"/>}/>
+          <Route path="/productAbout/:productId" element={<ProductAbout />} />
+          
 
           {/* Private Routes */}
           <Route element={<PrivateRoute />}>

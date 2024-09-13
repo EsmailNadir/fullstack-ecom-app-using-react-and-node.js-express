@@ -1,10 +1,10 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const productRoutes = require("./routes/productRoutes");
-const userRoutes = require("./routes/UserRoutes");
-const cartRoutes = require("./routes/cartRoutes");
+import express from 'express'
+import cors from 'cors';
+import mongoose from 'mongoose'
+import dotenv from 'dotenv'
+import productRoutes from './routes/productRoutes.js'
+import userRoutes from './routes/UserRoutes.js'
+import cartRoutes from './routes/cartRoutes.js'
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -23,7 +23,10 @@ app.get("/", (_req, res) => {
 
 // Use the routes
 app.use("/api/products", productRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/users", (req, res, next) => {
+  console.log(`Request to /api/users: ${req.method} ${req.url}`);
+  next();
+}, userRoutes);
 app.use("/api/cart", cartRoutes);
 
 // Error handling middleware

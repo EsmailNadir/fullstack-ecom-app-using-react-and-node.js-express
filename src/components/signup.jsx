@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Signup() {
     const [userName, setUserName] = useState('');
@@ -62,15 +63,13 @@ function Signup() {
         if (confirmPassword === '') newErrors.confirmPassword = 'Confirmation password is required';
         if (confirmPassword !== password) newErrors.confirmPassword = 'Passwords do not match';
        
-
-
         if (Object.keys(newErrors).length > 0) {
             setError(newErrors);
         } else {
             setLoading(true);
             console.log('Form submitted', { userName, password, email, confirmPassword });
             try {
-                await axios.post('http://localhost:5001/api/users/signup', { username: userName,password, email }); 
+                await axios.post('http://localhost:5001/api/users/signup', { username: userName, password, email }); 
                 setUserName('');
                 setPassword('');
                 setConfirmPassword('');
@@ -96,58 +95,83 @@ function Signup() {
     };
 
     return (
-        <div className="Signup-sheet">
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Username
-                    <input
-                        className="signup-username"
-                        type="text"
-                        value={userName}
-                        onChange={handleUserName}
-                        aria-invalid={error.userName ? "true" : "false"}
-                        aria-describedby="userNameError"
-                    />
-                    {error.userName && <p id="userNameError" className="error">{error.userName}</p>}
-                </label>
-                <label className="password-signup">
-                    Password
-                    <input
-                        className="signup-password"
-                        type="password"
-                        value={password}
-                        onChange={handlePassword}
-                        aria-invalid={error.password ? "true" : "false"}
-                        aria-describedby="passwordError"
-                    />
-                    {error.password && <p id="passwordError" className="error">{error.password}</p>}
-                </label>
-                <label>
-                    Email
-                    <input
-                        className="signup-email"
-                        type="email"
-                        value={email}
-                        onChange={handleEmail}
-                        aria-invalid={error.email ? "true" : "false"}
-                        aria-describedby="emailError"
-                    />
-                    {error.email && <p id="emailError" className="error">{error.email}</p>}
-                </label>
-                <label>
-                    Confirm Password
-                    <input
-                        className="password-confirm"
-                        type="password"
-                        value={confirmPassword}
-                        onChange={handleConfirm}
-                        aria-invalid={error.confirmPassword ? "true" : "false"}
-                        aria-describedby="confirmPasswordError"
-                    />
-                    {error.confirmPassword && <p id="confirmPasswordError" className="error">{error.confirmPassword}</p>}
-                </label>
-                <button type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</button>
-            </form>
+        <div className="p-4 mx-auto text-center flex flex-col items-center justify-center min-h-screen">
+            <div className="w-full max-w-sm bg-white shadow-md rounded-lg p-8">
+                <h2 className="text-xl mb-6">Create an Account</h2>
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                    <div className="flex flex-col">
+                        <input
+                            id="username"
+                            className="w-full px-5 py-2 text-gray-700 border rounded-lg focus:outline-none"
+                            placeholder="Username"
+                            type="text"
+                            value={userName}
+                            onChange={handleUserName}
+                            aria-invalid={error.userName ? "true" : "false"}
+                            aria-describedby="userNameError"
+                        />
+                        {error.userName && <p id="userNameError" className="mt-1 text-red-500 text-sm">{error.userName}</p>}
+                    </div>
+
+                    <div className="flex flex-col">
+                        <input
+                            id="password"
+                            className="w-full px-5 py-2 text-gray-700 border rounded-lg focus:outline-none"
+                            placeholder="Password"
+                            type="password"
+                            value={password}
+                            onChange={handlePassword}
+                            aria-invalid={error.password ? "true" : "false"}
+                            aria-describedby="passwordError"
+                        />
+                        {error.password && <p id="passwordError" className="mt-1 text-red-500 text-sm">{error.password}</p>}
+                    </div>
+
+                    <div className="flex flex-col">
+                        <input
+                            id="email"
+                            className="w-full px-5 py-2 text-gray-700 border rounded-lg focus:outline-none"
+                            placeholder="Email"
+                            type="email"
+                            value={email}
+                            onChange={handleEmail}
+                            aria-invalid={error.email ? "true" : "false"}
+                            aria-describedby="emailError"
+                        />
+                        {error.email && <p id="emailError" className="mt-1 text-red-500 text-sm">{error.email}</p>}
+                    </div>
+
+                    <div className="flex flex-col">
+                        <input
+                            id="confirmPassword"
+                            className="mb-5 w-full px-5 py-2 text-gray-700 border rounded-lg focus:outline-none"
+                            placeholder="Confirm Password"
+                            type="password"
+                            value={confirmPassword}
+                            onChange={handleConfirm}
+                            aria-invalid={error.confirmPassword ? "true" : "false"}
+                            aria-describedby="confirmPasswordError"
+                        />
+                        {error.confirmPassword && <p id="confirmPasswordError" className="mt-1 text-red-500 text-sm">{error.confirmPassword}</p>}
+                    </div>
+
+                    <div className="text-sm text-gray-500 dark:text-gray-400 mb-5">
+                        By creating an account, you agree to our terms & conditions and privacy policy.
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full bg-black text-white font-bold py-2 px-5 rounded-md border border-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+                    >
+                        {loading ? 'Submitting...' : 'Sign Up'}
+                    </button>
+                    
+                    <div className="mt-4">
+                        <Link className="text-black text-xl" to="/login">Or Log in</Link>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

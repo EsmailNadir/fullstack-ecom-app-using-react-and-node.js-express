@@ -63,7 +63,7 @@ function UserProfile(){
         setLoading(true);
         setError('');
         setSuccess('');
-
+    
         if(newPassword !== confirmNewPassword){
             setError('Passwords do not match')
             setLoading(false);
@@ -72,39 +72,44 @@ function UserProfile(){
         const token = localStorage.getItem('token')
         const config = {
             headers:{
-                'authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`
+            }
         }
-        
-        }
-        const userData={
-        username,
-        email,
-        newPassword,
-        currentPassword,
+        const userData = {
+            username,
+            email,
+            currentPassword,
+            newPassword,
         };
-        try{
-            const response = await axios.put('http://localhost:5001/api/users/me',userData,config)
-            setSuccess('profile updated successfully');
-        }catch (error){
-            setError('error updating profile')
-        }finally{
+        try {
+            console.log('Sending update request with data:', userData);
+            const response = await axios.put('http://localhost:5001/api/users/me', userData, config)
+            console.log('Update response:', response.data);
+            setSuccess('Profile updated successfully');
+            setCurrentPassword('');
+            setNewPassowrd('');
+            setConfirmNewPassword('');
+        } catch (error) {
+            console.error('Error updating profile:', error.response?.data?.message || error.message);
+            setError(error.response?.data?.message || 'Error updating profile');
+        } finally {
             setLoading(false);
         }
-        
-        
-
     }
-
    
     return <div>
         {loading && <p>Loading...</p>}
         {error && <p className="error">{error}</p>}
         {success && <p className="success">{success}</p>}
-        <h1>userProfile</h1>
-        <form className="userProfile" onSubmit={handleFormSubmit}>
+        <div className="flex items-start py-12 justify-center   min-h-screen bg-gray-100">
+        <form className=" items-center  rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleFormSubmit}>
+        
+                
+            
             <label>
-                username
             <input 
+            className="mb-4 px-3 py-2 text-gray-700 border rounded focus:outline-none"
+            placeholder="username"
             type="text"
             onChange={handleUserNameChange}
             value={username}
@@ -112,16 +117,19 @@ function UserProfile(){
 
             </label>
             <label>
-                email
+                
             <input 
+            className="mb-4 px-3 py-2 text-gray-700 border rounded focus:outline-none"
+            placeholder="email"
             type="email"
             onChange={handleEmailChange}
             value={email}
             />
             </label>
             <label>
-               currentPassword
             <input 
+            className="mb-4 px-3 py-2 text-gray-700 border rounded focus:outline-none"
+            placeholder="currentPassword"
             type="password"
             onChange={handleCurrentPasswordChange}
             value={currentPassword}
@@ -131,8 +139,9 @@ function UserProfile(){
 
             
             <label>
-               change password
             <input 
+            className="mb-4 px-3 py-2 text-gray-700 border rounded focus:outline-none"
+            placeholder="change password"
             type="password"
             onChange={handleNewPasswordChange}
             value={newPassword}
@@ -140,18 +149,21 @@ function UserProfile(){
 
             </label>
             <label>
-               confirmNewPassword
             <input 
+            className="mb-4 px-3 py-2 text-gray-700 border rounded focus:outline-none"
+            placeholder="confirmNewPassword"
             type="password"
             onChange={handleConfirmPasswordChange}
             value={confirmNewPassword}
             />
 
             </label>
-            <button type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</button>
+            <button className="w-20 p-2 bg-blue-500 text-white rounded cursor-pointer transition duration-200 hover:bg-blue-700" type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</button>
             
             </form> 
+            </div>
     </div>
+    
 }
 
 export default UserProfile;
