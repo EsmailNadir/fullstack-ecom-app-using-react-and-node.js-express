@@ -18,6 +18,7 @@ function ProductCard({ product, onAddToCart }) {
                         {product.description}
                     </p>
                     <p className="text-xl font-bold mb-4">${product.price.toFixed(2)}</p>
+                    <p className="text-sm mb-4 text-yellow-500"> Rating: {product.ratings}</p>
                 </div>
                 <Link
                     to={`/productAbout/${product._id}`}

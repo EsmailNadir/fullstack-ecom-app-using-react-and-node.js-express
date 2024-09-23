@@ -12,9 +12,11 @@ import AdminProductManagement from "./components/adminProductManagement";
 import './input.css';
 import Cart from "./components/ShoppingCart";
 import ProductAbout from "./components/productAbout";
+import LoginContext, { LoginProvider } from "./components/context/loginContext";
 
 function App() {
   return (
+   <LoginProvider>
     <Router>
       <div>
         <Navbar />
@@ -28,6 +30,7 @@ function App() {
           <Route path="/cart" element={<Cart key="cart"/>}/>
           <Route path="/productAbout/:productId" element={<ProductAbout />} />
           
+          
 
           {/* Private Routes */}
           <Route element={<PrivateRoute />}>
@@ -37,6 +40,8 @@ function App() {
         </Routes>
       </div>
     </Router>
+    </LoginProvider>
+    
   );
 }
 
