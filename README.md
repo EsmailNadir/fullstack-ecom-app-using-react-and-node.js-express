@@ -26,3 +26,4 @@ Frontend: React.js, Context API for state management, Tailwind CSS for styling.
 Backend: Node.js, Express.js, JWT for authentication, Mongoose for database interaction.
 Database: MongoDB for storing product, user, and cart data.
 
+![Screenshot 2024-09-24 at 2 02 22 PM](https://github.com/user-attachments/assets/4ded9ac6-33f4-40fc-ac6f-2c0deccdf0d9)
