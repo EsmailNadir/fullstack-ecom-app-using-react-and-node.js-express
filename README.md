@@ -26,14 +26,22 @@ Frontend: React.js, Context API for state management, Tailwind CSS for styling.
 Backend: Node.js, Express.js, JWT for authentication, Mongoose for database interaction.
 Database: MongoDB for storing product, user, and cart data.
 ## Project images 
+
 Login Page
+
 ![Screenshot 2024-09-24 at 2 02 22 PM](https://github.com/user-attachments/assets/4ded9ac6-33f4-40fc-ac6f-2c0deccdf0d9)
 Sign Up Page
+
 ![Screenshot 2024-09-24 at 2 02 48 PM](https://github.com/user-attachments/assets/a2771f43-2c47-42dc-a6a8-7656aaa9c0e9)
 Products Display
+
 ![Screenshot 2024-09-24 at 2 05 52 PM](https://github.com/user-attachments/assets/79cded4f-294c-4bd3-8d02-5834664ca2ec)
 Admin Product Management
+
 ![Screenshot 2024-09-24 at 2 06 36 PM](https://github.com/user-attachments/assets/f499999c-4643-4723-9c93-d0d1de865ff7)
-Shopping Cart
+Change Password
+
 ![Screenshot 2024-09-24 at 2 07 14 PM](https://github.com/user-attachments/assets/019283fa-354c-4ed8-af0e-7924053d297a)
+Shopping Cart
+
 ![Screenshot 2024-09-24 at 2 08 36 PM](https://github.com/user-attachments/assets/24e4eb3b-b79d-4457-b637-9381d084a707)
