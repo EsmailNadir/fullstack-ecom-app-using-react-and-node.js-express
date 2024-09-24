@@ -14,9 +14,7 @@ function ProductAbout() {
 
   const fetchProductData = async () => {
     try {
-      console.log("Fetching product with ID:", productId);
       const response = await axios.get(`http://localhost:5001/api/products/${productId}`);
-      console.log("Response data:", response.data);
       setProductAbout(response.data);
     } catch (error) {
       console.error("Error fetching product details:", error.response || error);
@@ -30,6 +28,11 @@ function ProductAbout() {
   if (!productAbout) {
     return <div className="text-center text-gray-500">Loading...</div>;
   }
+
+  const onAddToCart = (productId) => {
+    // Logic for adding to cart can go here
+    console.log("Product added to cart:", productId);
+  };
 
   return (
     <div className="p-6">

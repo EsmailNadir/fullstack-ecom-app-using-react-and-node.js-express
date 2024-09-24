@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
 
 function UserProfile() {
   const [username, setUserName] = useState('');
@@ -18,41 +17,19 @@ function UserProfile() {
       try {
         const token = localStorage.getItem('token');
         const config = {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+          headers: { 'Authorization': `Bearer ${token}` },
         };
         const response = await axios.get('http://localhost:5001/api/users/me', config);
         setUserName(response.data.username);
         setEmail(response.data.email);
-        setLoading(false);
       } catch (error) {
         setError('Error fetching user data');
+      } finally {
         setLoading(false);
       }
     };
     fetchUserData();
   }, []);
-
-  const handleUserNameChange = (e) => {
-    setUserName(e.target.value);
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleCurrentPasswordChange = (e) => {
-    setCurrentPassword(e.target.value);
-  };
-
-  const handleNewPasswordChange = (e) => {
-    setNewPassword(e.target.value);
-  };
-
-  const handleConfirmPasswordChange = (e) => {
-    setConfirmNewPassword(e.target.value);
-  };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -65,28 +42,18 @@ function UserProfile() {
       setLoading(false);
       return;
     }
+
     const token = localStorage.getItem('token');
-    const config = {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    };
-    const userData = {
-      username,
-      email,
-      currentPassword,
-      newPassword,
-    };
+    const config = { headers: { 'Authorization': `Bearer ${token}` } };
+    const userData = { username, email, currentPassword, newPassword };
+
     try {
-      console.log('Sending update request with data:', userData);
-      const response = await axios.put('http://localhost:5001/api/users/me', userData, config);
-      console.log('Update response:', response.data);
+      await axios.put('http://localhost:5001/api/users/me', userData, config);
       setSuccess('Profile updated successfully');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmNewPassword('');
     } catch (error) {
-      console.error('Error updating profile:', error.response?.data?.message || error.message);
       setError(error.response?.data?.message || 'Error updating profile');
     } finally {
       setLoading(false);
@@ -104,72 +71,62 @@ function UserProfile() {
 
         <form onSubmit={handleFormSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-              Username
-            </label>
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">Username</label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
               placeholder="Username"
               value={username}
-              onChange={handleUserNameChange}
+              onChange={(e) => setUserName(e.target.value)}
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-              Email
-            </label>
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email</label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="email"
               type="email"
               placeholder="Email"
               value={email}
-              onChange={handleEmailChange}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="currentPassword">
-              Current Password
-            </label>
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="currentPassword">Current Password</label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="currentPassword"
               type="password"
               placeholder="Current Password"
               value={currentPassword}
-              onChange={handleCurrentPasswordChange}
+              onChange={(e) => setCurrentPassword(e.target.value)}
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="newPassword">
-              New Password
-            </label>
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="newPassword">New Password</label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="newPassword"
               type="password"
               placeholder="New Password"
               value={newPassword}
-              onChange={handleNewPasswordChange}
+              onChange={(e) => setNewPassword(e.target.value)}
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmNewPassword">
-              Confirm New Password
-            </label>
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmNewPassword">Confirm New Password</label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="confirmNewPassword"
               type="password"
               placeholder="Confirm New Password"
               value={confirmNewPassword}
-              onChange={handleConfirmPasswordChange}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
             />
           </div>
 

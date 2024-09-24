@@ -39,30 +39,19 @@ function Login() {
     setLoading(true);
     try {
       const response = await axios.post('http://localhost:5001/api/users/login', { email: loginEmail, password: loginPassword });
-      console.log('Login successful:', response.data);
 
       if (response.data.token) {
-        console.log('Token received:', response.data.token);
-        // Use the login function from context
         login(response.data.token);
-
         const decodedToken = decodeJwt(response.data.token);
-        console.log('Decoded Token:', decodedToken);
 
         if (decodedToken && decodedToken.userId) {
           localStorage.setItem('userId', decodedToken.userId);
-          console.log('UserId stored in localStorage:', localStorage.getItem('userId'));
-        } else {
-          console.error('UserId not received or decoded:', decodedToken.userId);
         }
 
-        // Navigate after setting state
+        // Navigate after successful login
         navigate('/products');
-      } else {
-        console.error('Token not received');
       }
     } catch (error) {
-      console.log('Error during login:', error);
       setLoginError(prevErrors => ({ ...prevErrors, general: `Login failed: ${error.response?.data?.message || 'Please try again.'}` }));
     } finally {
       setLoading(false);

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from "react-icons/fa";  
 import LoginContext from './context/loginContext';
@@ -16,25 +16,23 @@ const Navbar = () => {
     <nav className="bg-black text-white">
       <div className="container mx-auto flex justify-between items-center p-4">
         {/* Left Side Links */}
-        <div className="flex items-center space-x-4">
-          <div className="hidden md:flex space-x-4">
-            <Link to="/products" className="hover:text-gray-300">Products</Link>
-            <Link to="/AdminProductManagement" className="hover:text-gray-300">Admin</Link>
-          </div>
+        <div className="hidden md:flex space-x-4">
+          <Link to="/products" className="hover:text-gray-300">Products</Link>
+          <Link to="/AdminProductManagement" className="hover:text-gray-300">Admin</Link>
         </div>
 
         {/* Right Side Links */}
-        <div className="hidden md:flex items-center justify-end">
+        <div className="hidden md:flex items-center">
           <div className="relative">
             {isLoggedIn ? (
               <>
                 {/* Account Button */}
                 <button onClick={toggleAccountDropdown} className="hover:text-gray-300">
-                  Account^
+                  Account
                 </button>
                 {/* Account Dropdown */}
                 {isAccountOpen && (
-                  <div className="absolute right-0 mt-2 py-2 w-48 bg-black rounded-lg shadow-xl items-center">
+                  <div className="absolute right-0 mt-2 py-2 w-48 bg-black rounded-lg shadow-xl">
                     <Link to="/userProfile" className="block px-4 py-2 hover:text-gray-300">
                       Account Details
                     </Link>
@@ -49,7 +47,6 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                {/* Login and Signup Links */}
                 <Link to="/login" className="hover:text-gray-300">Login</Link>
                 <Link to="/signup" className="hover:text-gray-300 ml-4">Signup</Link>
               </>
@@ -58,9 +55,10 @@ const Navbar = () => {
 
           {/* Cart Link */}
           <Link to="/cart" className="px-8 hover:text-gray-300 flex flex-col items-center">
-            <FaShoppingCart className="text-2xl" />
-            <span>Cart</span>
+                <FaShoppingCart className="text-2xl" />
+                <span>Cart</span>
           </Link>
+
         </div>
 
         {/* Mobile Menu Button */}

@@ -1,5 +1,4 @@
-import { createContext, useState, useEffect } from "react";
-
+import { createContext, useState } from "react";
 
 // Create the context
 export const LoginContext = createContext();
@@ -31,6 +30,4 @@ export const LoginProvider = ({ children }) => {
   );
 };
 
-
-export default  LoginContext;
-
+export default LoginContext;
